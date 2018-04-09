@@ -1,6 +1,6 @@
 package com.square.bank.model;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -34,7 +34,7 @@ public class Client {
 			inverseJoinColumns=@JoinColumn(name="account_id", referencedColumnName="id")
 	)
 	@JsonBackReference(value="client_account")
-	private Set<Account> accounts;
+	private List<Account> accounts;
 
 	public int getId() {
 		return id;
@@ -60,11 +60,11 @@ public class Client {
 		this.phone = phone;
 	}
 
-	public Set<Account> getAccounts() {
+	public List<Account> getAccounts() {
 		return accounts;
 	}
 
-	public void setAccounts(Set<Account> accounts) {
+	public void setAccounts(List<Account> accounts) {
 		this.accounts = accounts;
 	}
 

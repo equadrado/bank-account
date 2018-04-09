@@ -12,6 +12,7 @@ import com.square.bank.exception.ClientAlreadyExistsException;
 import com.square.bank.exception.ClientNotFoundException;
 import com.square.bank.exception.MandatoryFieldNotProvidedException;
 import com.square.bank.exception.NewObjectCantBeNullException;
+import com.square.bank.model.Account;
 import com.square.bank.model.Client;
 import com.square.bank.repository.ClientRepository;
 
@@ -68,6 +69,15 @@ public class ClientService {
 			throw new ClientNotFoundException();
 		} else {
 			clientRepository.delete(client.get());
+		}
+	}
+	
+	public List<Account> getAccountsByClientId(int id){
+		Optional<Client> client = clientRepository.findById(id);
+		if (!client.isPresent()) {
+			throw new ClientNotFoundException();
+		} else {
+			return client.get().getAccounts();
 		}
 	}
 }

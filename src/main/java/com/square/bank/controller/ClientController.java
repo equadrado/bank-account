@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.square.bank.dto.ClientDTO;
 import com.square.bank.exception.InvalidPathParameterException;
+import com.square.bank.model.Account;
 import com.square.bank.model.Client;
 import com.square.bank.services.ClientService;
 
@@ -53,6 +54,15 @@ public class ClientController {
 	public void deleteClient(@PathVariable(name="id") int id) {
 		if (id > 0) {
 			clientService.deleteClient(id);
+		} else {
+			throw new InvalidPathParameterException();
+		}
+	}
+
+	@GetMapping("/{id}/accounts") 
+	public List<Account> getAccountsByClientId(@PathVariable(name="id") int id) {
+		if (id > 0) {
+			return clientService.getAccountsByClientId(id);
 		} else {
 			throw new InvalidPathParameterException();
 		}
