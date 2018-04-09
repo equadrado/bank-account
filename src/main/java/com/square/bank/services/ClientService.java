@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.square.bank.dto.ClientDTO;
-import com.square.bank.exception.ClientAlreadyExistsException;
+import com.square.bank.exception.ObjectAlreadyExistsException;
 import com.square.bank.exception.ClientNotFoundException;
 import com.square.bank.exception.MandatoryFieldNotProvidedException;
 import com.square.bank.exception.NewObjectCantBeNullException;
@@ -36,11 +36,11 @@ public class ClientService {
 	}
 	
 	@Transactional
-	public Client newClient(ClientDTO client) {
+	public Client createClient(ClientDTO client) {
 		if (client.getId() != 0) { // primitive type can't be null, zero is the default "int" value
 			Optional<Client> oldClient = clientRepository.findById(client.getId());
 			if (oldClient.isPresent()) {
-				throw new ClientAlreadyExistsException();
+				throw new ObjectAlreadyExistsException();
 			}
 		}
 		if ( (client != null) && (!client.getName().equals("")) ) {

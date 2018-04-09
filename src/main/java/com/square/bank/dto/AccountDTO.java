@@ -1,5 +1,7 @@
 package com.square.bank.dto;
 
+import com.square.bank.model.Account;
+
 public class AccountDTO {
 	private int id;
 	private int number;
@@ -22,5 +24,14 @@ public class AccountDTO {
 	}
 	public void setBalance(double balance) {
 		this.balance = balance;
+	}
+	public static Account bind(AccountDTO dto){
+		Account account = new Account();
+		
+		account.setId(dto.getId());
+		account.setNumber(dto.getNumber());
+		account.setBalance(dto.getBalance());
+		
+		return account;
 	}
 }

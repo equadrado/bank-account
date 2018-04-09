@@ -7,6 +7,11 @@ package com.square.bank.exception;
 //public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 public class RestResponseEntityExceptionHandler extends RuntimeException {
 
+	public RestResponseEntityExceptionHandler() {
+		super();
+//		LogError(this);
+	}
+	
 	public void LogError(Exception e) {
 		System.out.print(e.getMessage());
 	}

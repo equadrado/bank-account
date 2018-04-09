@@ -42,7 +42,7 @@ public class ClientController {
 	
 	@PutMapping("")
 	public Client newClient(@RequestBody() ClientDTO client) {
-		return clientService.newClient(client);
+		return clientService.createClient(client);
 	}
 	
 	@PostMapping("")
