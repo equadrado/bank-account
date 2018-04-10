@@ -20,10 +20,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Account {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+	private Long id;
 	
 	@NotNull
-	private int number;
+	private Long number;
 	
 	@NotNull
 	private double balance;
@@ -37,19 +37,19 @@ public class Account {
 	@JsonManagedReference(value="client_account")
 	private List<Client> clients;
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public int getNumber() {
+	public Long getNumber() {
 		return number;
 	}
 
-	public void setNumber(int number) {
+	public void setNumber(Long number) {
 		this.number = number;
 	}
 

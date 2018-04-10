@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.square.bank.model.Account;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Integer>, JpaSpecificationExecutor<Account> {
+public interface AccountRepository extends JpaRepository<Account, Long>, JpaSpecificationExecutor<Account> {
 
+	public Account findByNumber(Long number);
 }

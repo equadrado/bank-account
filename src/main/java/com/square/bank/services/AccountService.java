@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import org.hamcrest.core.IsNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +36,7 @@ public class AccountService {
 		return accountRepository.findAll();
 	}
 	
-	public Optional<Account> findById(int id) {
+	public Optional<Account> findById(Long id) {
 		if (id != 0) {
 			return accountRepository.findById(id);
 		} else {
@@ -45,15 +46,17 @@ public class AccountService {
 	
 	@Transactional
 	public Account createAccount(AccountDTO account){
-		if (account.getId() != 0) { // primitive type can't be null, zero is the default "int" value
+		if (account.getId() != null) { // primitive type can't be null, zero is the default "Long" value
 			Optional<Account> oldAccount = accountRepository.findById(account.getId());
 			if (oldAccount.isPresent()) {
 				throw new ObjectAlreadyExistsException();
 			}
 		}
 		if (account.getNumber() != 0) { // check if account number already exists
-			List<Account> oldAccount = accountRepository.findAll(AccountSpecification.equalNumber(account.getNumber()));
-			if (!oldAccount.isEmpty()) {
+//			List<Account> oldAccount = accountRepository.findAll(AccountSpecification.equalNumber(account.getNumber()));
+//			if (!oldAccount.isEmpty()) {
+			Account oldAccount = accountRepository.findByNumber(account.getNumber());
+			if (oldAccount != null) {
 				throw new ObjectAlreadyExistsException();
 			}
 		} else {
@@ -66,9 +69,9 @@ public class AccountService {
 		}
 	}
 	
-	private int generateAccountNumber() {
-		int accountNr = 0;
-		int counter = 0;
+	public Long generateAccountNumber() { // private
+		long accountNr = 0;
+		long counter = 0;
 
 		Random r = new Random();
 		int Low = 1000;
@@ -77,15 +80,17 @@ public class AccountService {
 		while (found) {
 			counter++;
 			accountNr = r.nextInt(High-Low) + Low;
-			List<Account> oldAccount = accountRepository.findAll(AccountSpecification.equalNumber(accountNr));
-			if (oldAccount.isEmpty()) {
+//			List<Account> oldAccount = accountRepository.findAll(AccountSpecification.equalNumber(accountNr));
+//			if (oldAccount.isEmpty()) {
+			Account oldAccount = accountRepository.findByNumber(accountNr);
+			if (oldAccount.equals(null)) {
 				found = false;
 			} else if (counter > 200000) { // too many tries
 				accountNr = 0;
 				found = false;
 			}
 		}
-		return accountNr;
+		return (Long)accountNr;
 	}
 	
 	@Transactional
@@ -105,7 +110,7 @@ public class AccountService {
 	}
 	
 	@Transactional
-	public void deleteAccount(int id) {
+	public void deleteAccount(Long id) {
 		Optional<Account> account = accountRepository.findById(id);
 		if (account.isPresent()) {
 			accountRepository.delete(account.get());
@@ -115,7 +120,7 @@ public class AccountService {
 	}
 	
 	@Transactional
-	public Account addClient(int id, ClientDTO dto) {
+	public Account addClient(Long id, ClientDTO dto) {
 		Optional<Account> account = accountRepository.findById(id);
 		if (account.isPresent()) {
 			// search for this client
@@ -146,7 +151,7 @@ public class AccountService {
 	}
 	
 	@Transactional
-	public Account removeClient(int id, ClientDTO dto) {
+	public Account removeClient(Long id, ClientDTO dto) {
 		Optional<Account> account = accountRepository.findById(id);
 		if (account.isPresent()) {
 			// search for this client

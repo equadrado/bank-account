@@ -32,7 +32,7 @@ public class ClientController {
 	}
 	
 	@GetMapping("/{id}") 
-	public Optional<Client> getClientById(@PathVariable(name="id") int id) {
+	public Optional<Client> getClientById(@PathVariable(name="id") Long id) {
 		if (id > 0) {
 			return clientService.findById(id);
 		} else {
@@ -51,7 +51,7 @@ public class ClientController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteClient(@PathVariable(name="id") int id) {
+	public void deleteClient(@PathVariable(name="id") Long id) {
 		if (id > 0) {
 			clientService.deleteClient(id);
 		} else {
@@ -60,7 +60,7 @@ public class ClientController {
 	}
 
 	@GetMapping("/{id}/accounts") 
-	public List<Account> getAccountsByClientId(@PathVariable(name="id") int id) {
+	public List<Account> getAccountsByClientId(@PathVariable(name="id") Long id) {
 		if (id > 0) {
 			return clientService.getAccountsByClientId(id);
 		} else {

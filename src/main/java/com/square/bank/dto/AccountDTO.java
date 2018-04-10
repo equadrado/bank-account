@@ -3,20 +3,20 @@ package com.square.bank.dto;
 import com.square.bank.model.Account;
 
 public class AccountDTO {
-	private int id;
-	private int number;
+	private Long id;
+	private Long number;
 	private double balance;
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
-	public int getNumber() {
+	public Long getNumber() {
 		return number;
 	}
-	public void setNumber(int number) {
+	public void setNumber(Long number) {
 		this.number = number;
 	}
 	public double getBalance() {

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.square.bank.model.Movimentation;
 
 @Repository
-public interface MovimentationRepository extends JpaRepository<Movimentation, Integer>{
+public interface MovimentationRepository extends JpaRepository<Movimentation, Long>{
 
 }

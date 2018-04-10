@@ -22,11 +22,11 @@ public class ClientServiceMockTest {
 	
 	public ClientServiceMockTest() {
 		cli1 = new Client();
-		cli1.setId(1);
+		cli1.setId((long) 1);
 		cli1.setName("Client1");
 		
 		cli2 = new Client();
-		cli1.setId(2);
+		cli1.setId((long) 2);
 		cli1.setName("Client2");
 	}
 

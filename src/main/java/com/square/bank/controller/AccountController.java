@@ -32,7 +32,7 @@ public class AccountController {
 	}
 	
 	@GetMapping("/{id}")
-	public Optional<Account> getAccountById(@PathVariable(name="id") int id) {
+	public Optional<Account> getAccountById(@PathVariable(name="id") Long id) {
 		if (id != 0) {
 			return accountService.findById(id);
 		} else {
@@ -51,7 +51,7 @@ public class AccountController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteAccount(@PathVariable(name="id") int id) {
+	public void deleteAccount(@PathVariable(name="id") Long id) {
 		if (id > 0) {
 			accountService.deleteAccount(id);
 		} else {
@@ -60,7 +60,7 @@ public class AccountController {
 	}
 	
 	@PutMapping("/{id}/clients")
-	public Account addClients(@PathVariable(name="id") int id, @RequestBody() ClientDTO client) {
+	public Account addClients(@PathVariable(name="id") Long id, @RequestBody() ClientDTO client) {
 		return accountService.addClient(id, client);
 	}
 	

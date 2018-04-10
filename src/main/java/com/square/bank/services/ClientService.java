@@ -26,7 +26,7 @@ public class ClientService {
 		return clientRepository.findAll();
 	}
 	
-	public Optional<Client> findById(int id) {
+	public Optional<Client> findById(Long id) {
 		Optional<Client> client = clientRepository.findById(id);
 		if (client.isPresent()) {
 			return client;
@@ -37,7 +37,7 @@ public class ClientService {
 	
 	@Transactional
 	public Client createClient(ClientDTO client) {
-		if (client.getId() != 0) { // primitive type can't be null, zero is the default "int" value
+		if (client.getId() != null) { // primitive type can't be null, zero is the default "Long" value
 			Optional<Client> oldClient = clientRepository.findById(client.getId());
 			if (oldClient.isPresent()) {
 				throw new ObjectAlreadyExistsException();
@@ -63,7 +63,7 @@ public class ClientService {
 	}
 	
 	@Transactional
-	public void deleteClient(int id) {
+	public void deleteClient(Long id) {
 		Optional<Client> client = clientRepository.findById(id);
 		if (!client.isPresent()) {
 			throw new ClientNotFoundException();
@@ -72,7 +72,7 @@ public class ClientService {
 		}
 	}
 	
-	public List<Account> getAccountsByClientId(int id){
+	public List<Account> getAccountsByClientId(Long id){
 		Optional<Client> client = clientRepository.findById(id);
 		if (!client.isPresent()) {
 			throw new ClientNotFoundException();

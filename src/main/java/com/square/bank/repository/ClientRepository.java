@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.square.bank.model.Client;
 
 @Repository
-public interface ClientRepository extends JpaRepository<Client, Integer> {
+public interface ClientRepository extends JpaRepository<Client, Long> {
 
 }
