@@ -37,7 +37,8 @@ public class AccountController {
 	}
 	
 	@GetMapping("/{id}")
-	public Optional<Account> getAccountById(@PathVariable(name="id") Long id) throws AccountNotFoundException, InvalidPathParameterException {
+	public Optional<Account> getAccountById(@PathVariable(name="id") Long id) 
+			throws AccountNotFoundException, InvalidPathParameterException {
 		if (id != 0) {
 			return accountService.findById(id);
 		} else {
@@ -46,17 +47,20 @@ public class AccountController {
 	}
 	
 	@PostMapping("")
-	public Account createAccount(@RequestBody() AccountDTO account) throws ObjectAlreadyExistsException, NewObjectCantBeNullException {
+	public Account createAccount(@RequestBody() AccountDTO account) 
+			throws ObjectAlreadyExistsException, NewObjectCantBeNullException {
 		return accountService.createAccount(account);
 	}
 	
 	@PutMapping("")
-	public Account updateAccount(@RequestBody() AccountDTO account) throws AccountNotFoundException, MandatoryFieldNotProvidedException {
+	public Account updateAccount(@RequestBody() AccountDTO account) 
+			throws AccountNotFoundException, MandatoryFieldNotProvidedException {
 		return accountService.updateAccount(account);
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteAccount(@PathVariable(name="id") Long id) throws AccountNotFoundException, InvalidPathParameterException {
+	public void deleteAccount(@PathVariable(name="id") Long id) 
+			throws AccountNotFoundException, InvalidPathParameterException {
 		if (id > 0) {
 			accountService.deleteAccount(id);
 		} else {
@@ -65,7 +69,8 @@ public class AccountController {
 	}
 	
 	@PutMapping("/{id}/clients")
-	public Account addClients(@PathVariable(name="id") Long id, @RequestBody() ClientDTO client) throws ObjectAlreadyExistsException, ClientNotFoundException, AccountNotFoundException {
+	public Account addClients(@PathVariable(name="id") Long id, @RequestBody() ClientDTO client) 
+			throws ObjectAlreadyExistsException, ClientNotFoundException, AccountNotFoundException {
 		return accountService.addClient(id, client);
 	}
 	

@@ -36,7 +36,8 @@ public class ClientController {
 	}
 	
 	@GetMapping("/{id}") 
-	public Optional<Client> getClientById(@PathVariable(name="id") Long id) throws InvalidPathParameterException, ClientNotFoundException {
+	public Optional<Client> getClientById(@PathVariable(name="id") Long id) 
+			throws InvalidPathParameterException, ClientNotFoundException {
 		if (id > 0) {
 			return clientService.findById(id);
 		} else {
@@ -45,17 +46,20 @@ public class ClientController {
 	}
 	
 	@PutMapping("")
-	public Client newClient(@RequestBody() ClientDTO client) throws ObjectAlreadyExistsException, NewObjectCantBeNullException {
+	public Client newClient(@RequestBody() ClientDTO client) 
+			throws ObjectAlreadyExistsException, NewObjectCantBeNullException {
 		return clientService.createClient(client);
 	}
 	
 	@PostMapping("")
-	public Client updateClient(@RequestBody() ClientDTO client) throws ClientNotFoundException, MandatoryFieldNotProvidedException {
+	public Client updateClient(@RequestBody() ClientDTO client) 
+			throws ClientNotFoundException, MandatoryFieldNotProvidedException {
 		return clientService.updateClient(client);
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteClient(@PathVariable(name="id") Long id) throws ClientNotFoundException, InvalidPathParameterException {
+	public void deleteClient(@PathVariable(name="id") Long id) 
+			throws ClientNotFoundException, InvalidPathParameterException {
 		if (id > 0) {
 			clientService.deleteClient(id);
 		} else {
@@ -64,7 +68,8 @@ public class ClientController {
 	}
 
 	@GetMapping("/{id}/accounts") 
-	public List<Account> getAccountsByClientId(@PathVariable(name="id") Long id) throws ClientNotFoundException, InvalidPathParameterException {
+	public List<Account> getAccountsByClientId(@PathVariable(name="id") Long id) 
+			throws ClientNotFoundException, InvalidPathParameterException {
 		if (id > 0) {
 			return clientService.getAccountsByClientId(id);
 		} else {

@@ -18,9 +18,9 @@ import com.square.bank.services.ClientService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ClientServiceMockTest {
-	private Client cli1, cli2;
-	
-	public ClientServiceMockTest() {
+	static Client cli1, cli2;
+
+	static {
 		cli1 = new Client();
 		cli1.setId((long) 1);
 		cli1.setName("Client1");
@@ -29,7 +29,7 @@ public class ClientServiceMockTest {
 		cli1.setId((long) 2);
 		cli1.setName("Client2");
 	}
-
+	
 	@Mock
 	ClientRepository clientRepositoryMock; 
 	

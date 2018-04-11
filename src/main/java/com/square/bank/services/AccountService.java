@@ -45,31 +45,32 @@ public class AccountService {
 	}
 	
 	@Transactional
-	public Account createAccount(AccountDTO account) throws ObjectAlreadyExistsException, NewObjectCantBeNullException{
-		if (account.getId() != null) { // primitive type can't be null, zero is the default "Long" value
-			Optional<Account> oldAccount = accountRepository.findById(account.getId());
+	public Account createAccount(AccountDTO accountDTO) 
+			throws ObjectAlreadyExistsException, NewObjectCantBeNullException{
+		if (accountDTO.getId() != null) { // primitive type can't be null, zero is the default "Long" value
+			Optional<Account> oldAccount = accountRepository.findById(accountDTO.getId());
 			if (oldAccount.isPresent()) {
 				throw new ObjectAlreadyExistsException("Account", oldAccount.get().getNumber().toString());
 			}
 		}
-		if (account.getNumber() != 0) { // check if account number already exists
+		if (accountDTO.getNumber() != 0) { // check if account number already exists
 //			List<Account> oldAccount = accountRepository.findAll(AccountSpecification.equalNumber(account.getNumber()));
 //			if (!oldAccount.isEmpty()) {
-			Account oldAccount = accountRepository.findByNumber(account.getNumber());
+			Account oldAccount = accountRepository.findByNumber(accountDTO.getNumber());
 			if (oldAccount != null) {
 				throw new ObjectAlreadyExistsException("Account", oldAccount.getNumber().toString());
 			}
 		} else {
-			account.setNumber(generateAccountNumber());
+			accountDTO.setNumber(generateAccountNumber());
 		}
-		if ( (account != null) && (account.getNumber() != 0) ) {
-			return accountRepository.save(AccountDTO.bind(account));
+		if ( (accountDTO != null) && (accountDTO.getNumber() != 0) ) {
+			return accountRepository.save(AccountDTO.bind(accountDTO));
 		} else {
 			throw new NewObjectCantBeNullException("Account");
 		}
 	}
 	
-	public Long generateAccountNumber() { // private
+	private Long generateAccountNumber() { // private
 		long accountNr = 0;
 		long counter = 0;
 
