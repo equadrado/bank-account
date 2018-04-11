@@ -35,22 +35,24 @@ public class ClientService {
 		}
 	}
 	
-	@Transactional
-	public Client createClient(ClientDTO client) throws ObjectAlreadyExistsException, NewObjectCantBeNullException {
+//	@Transactional
+	public Client createClient(ClientDTO client) throws ObjectAlreadyExistsException, NewObjectCantBeNullException, MandatoryFieldNotProvidedException {
 		if (client.getId() != null) { // primitive type can't be null, zero is the default "Long" value
 			Optional<Client> oldClient = clientRepository.findById(client.getId());
 			if (oldClient.isPresent()) {
 				throw new ObjectAlreadyExistsException("Client", client.getId().toString());
 			}
 		}
-		if ( (client != null) && (!client.getName().equals("")) ) {
-			return clientRepository.save(ClientDTO.bind(client));
-		} else {
+		if (client.equals(null))  {
 			throw new NewObjectCantBeNullException("Client");
+		} else if (client.getName().isEmpty() ) {
+			throw new MandatoryFieldNotProvidedException("Client", "Name");
+		} else {
+			return clientRepository.save(ClientDTO.bind(client));
 		}
 	}
 	
-	@Transactional
+//	@Transactional
 	public Client updateClient(ClientDTO client) throws ClientNotFoundException, MandatoryFieldNotProvidedException {
 		Optional<Client> oldClient = clientRepository.findById(client.getId());
 		if (!oldClient.isPresent()) {
@@ -62,7 +64,7 @@ public class ClientService {
 		}
 	}
 	
-	@Transactional
+//	@Transactional
 	public void deleteClient(Long id) throws ClientNotFoundException {
 		Optional<Client> client = clientRepository.findById(id);
 		if (!client.isPresent()) {

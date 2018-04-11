@@ -47,7 +47,7 @@ public class ClientController {
 	
 	@PutMapping("")
 	public Client newClient(@RequestBody() ClientDTO client) 
-			throws ObjectAlreadyExistsException, NewObjectCantBeNullException {
+			throws ObjectAlreadyExistsException, NewObjectCantBeNullException, MandatoryFieldNotProvidedException {
 		return clientService.createClient(client);
 	}
 	

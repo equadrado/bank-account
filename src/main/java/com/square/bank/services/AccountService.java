@@ -53,7 +53,7 @@ public class AccountService {
 				throw new ObjectAlreadyExistsException("Account", oldAccount.get().getNumber().toString());
 			}
 		}
-		if (accountDTO.getNumber() != 0) { // check if account number already exists
+		if (accountDTO.getNumber() != null) { // check if account number already exists
 //			List<Account> oldAccount = accountRepository.findAll(AccountSpecification.equalNumber(account.getNumber()));
 //			if (!oldAccount.isEmpty()) {
 			Account oldAccount = accountRepository.findByNumber(accountDTO.getNumber());
@@ -94,7 +94,7 @@ public class AccountService {
 		return (Long)accountNr;
 	}
 	
-	@Transactional
+//	@Transactional
 	public Account updateAccount(AccountDTO account) throws AccountNotFoundException, MandatoryFieldNotProvidedException {
 		Optional<Account> oldAccount;
 		if ( (account != null) && (account.getId() != 0)) { 
@@ -110,7 +110,7 @@ public class AccountService {
 		}
 	}
 	
-	@Transactional
+//	@Transactional
 	public void deleteAccount(Long id) throws AccountNotFoundException {
 		Optional<Account> account = accountRepository.findById(id);
 		if (account.isPresent()) {
