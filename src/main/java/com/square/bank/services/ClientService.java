@@ -26,56 +26,56 @@ public class ClientService {
 		return clientRepository.findAll();
 	}
 	
-	public Optional<Client> findById(Long id) {
+	public Optional<Client> findById(Long id) throws ClientNotFoundException {
 		Optional<Client> client = clientRepository.findById(id);
 		if (client.isPresent()) {
 			return client;
 		} else {
-			throw new ClientNotFoundException();
+			throw new ClientNotFoundException(id);
 		}
 	}
 	
 	@Transactional
-	public Client createClient(ClientDTO client) {
+	public Client createClient(ClientDTO client) throws ObjectAlreadyExistsException, NewObjectCantBeNullException {
 		if (client.getId() != null) { // primitive type can't be null, zero is the default "Long" value
 			Optional<Client> oldClient = clientRepository.findById(client.getId());
 			if (oldClient.isPresent()) {
-				throw new ObjectAlreadyExistsException();
+				throw new ObjectAlreadyExistsException("Client", client.getId().toString());
 			}
 		}
 		if ( (client != null) && (!client.getName().equals("")) ) {
 			return clientRepository.save(ClientDTO.bind(client));
 		} else {
-			throw new NewObjectCantBeNullException();
+			throw new NewObjectCantBeNullException("Client");
 		}
 	}
 	
 	@Transactional
-	public Client updateClient(ClientDTO client) {
+	public Client updateClient(ClientDTO client) throws ClientNotFoundException, MandatoryFieldNotProvidedException {
 		Optional<Client> oldClient = clientRepository.findById(client.getId());
 		if (!oldClient.isPresent()) {
-			throw new ClientNotFoundException();
+			throw new ClientNotFoundException(client.getId());
 		} else if (client.getName().equals("")) {
-			throw new MandatoryFieldNotProvidedException();
+			throw new MandatoryFieldNotProvidedException("Client", "Name");
 		} else {
 			return clientRepository.save(ClientDTO.bind(client));
 		}
 	}
 	
 	@Transactional
-	public void deleteClient(Long id) {
+	public void deleteClient(Long id) throws ClientNotFoundException {
 		Optional<Client> client = clientRepository.findById(id);
 		if (!client.isPresent()) {
-			throw new ClientNotFoundException();
+			throw new ClientNotFoundException(id);
 		} else {
 			clientRepository.delete(client.get());
 		}
 	}
 	
-	public List<Account> getAccountsByClientId(Long id){
+	public List<Account> getAccountsByClientId(Long id) throws ClientNotFoundException{
 		Optional<Client> client = clientRepository.findById(id);
 		if (!client.isPresent()) {
-			throw new ClientNotFoundException();
+			throw new ClientNotFoundException(id);
 		} else {
 			return client.get().getAccounts();
 		}

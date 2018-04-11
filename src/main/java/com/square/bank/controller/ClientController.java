@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.square.bank.dto.ClientDTO;
+import com.square.bank.exception.ClientNotFoundException;
 import com.square.bank.exception.InvalidPathParameterException;
+import com.square.bank.exception.MandatoryFieldNotProvidedException;
+import com.square.bank.exception.NewObjectCantBeNullException;
+import com.square.bank.exception.ObjectAlreadyExistsException;
 import com.square.bank.model.Account;
 import com.square.bank.model.Client;
 import com.square.bank.services.ClientService;
@@ -32,39 +36,39 @@ public class ClientController {
 	}
 	
 	@GetMapping("/{id}") 
-	public Optional<Client> getClientById(@PathVariable(name="id") Long id) {
+	public Optional<Client> getClientById(@PathVariable(name="id") Long id) throws InvalidPathParameterException, ClientNotFoundException {
 		if (id > 0) {
 			return clientService.findById(id);
 		} else {
-			throw new InvalidPathParameterException();
+			throw new InvalidPathParameterException("Client", "Id");
 		}
 	}
 	
 	@PutMapping("")
-	public Client newClient(@RequestBody() ClientDTO client) {
+	public Client newClient(@RequestBody() ClientDTO client) throws ObjectAlreadyExistsException, NewObjectCantBeNullException {
 		return clientService.createClient(client);
 	}
 	
 	@PostMapping("")
-	public Client updateClient(@RequestBody() ClientDTO client) {
+	public Client updateClient(@RequestBody() ClientDTO client) throws ClientNotFoundException, MandatoryFieldNotProvidedException {
 		return clientService.updateClient(client);
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteClient(@PathVariable(name="id") Long id) {
+	public void deleteClient(@PathVariable(name="id") Long id) throws ClientNotFoundException, InvalidPathParameterException {
 		if (id > 0) {
 			clientService.deleteClient(id);
 		} else {
-			throw new InvalidPathParameterException();
+			throw new InvalidPathParameterException("Client", "Id");
 		}
 	}
 
 	@GetMapping("/{id}/accounts") 
-	public List<Account> getAccountsByClientId(@PathVariable(name="id") Long id) {
+	public List<Account> getAccountsByClientId(@PathVariable(name="id") Long id) throws ClientNotFoundException, InvalidPathParameterException {
 		if (id > 0) {
 			return clientService.getAccountsByClientId(id);
 		} else {
-			throw new InvalidPathParameterException();
+			throw new InvalidPathParameterException("Client", "Id");
 		}
 	}
 }

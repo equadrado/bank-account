@@ -36,20 +36,20 @@ public class AccountService {
 		return accountRepository.findAll();
 	}
 	
-	public Optional<Account> findById(Long id) {
+	public Optional<Account> findById(Long id) throws AccountNotFoundException {
 		if (id != 0) {
 			return accountRepository.findById(id);
 		} else {
-			throw new AccountNotFoundException();
+			throw new AccountNotFoundException(id);
 		}
 	}
 	
 	@Transactional
-	public Account createAccount(AccountDTO account){
+	public Account createAccount(AccountDTO account) throws ObjectAlreadyExistsException, NewObjectCantBeNullException{
 		if (account.getId() != null) { // primitive type can't be null, zero is the default "Long" value
 			Optional<Account> oldAccount = accountRepository.findById(account.getId());
 			if (oldAccount.isPresent()) {
-				throw new ObjectAlreadyExistsException();
+				throw new ObjectAlreadyExistsException("Account", oldAccount.get().getNumber().toString());
 			}
 		}
 		if (account.getNumber() != 0) { // check if account number already exists
@@ -57,7 +57,7 @@ public class AccountService {
 //			if (!oldAccount.isEmpty()) {
 			Account oldAccount = accountRepository.findByNumber(account.getNumber());
 			if (oldAccount != null) {
-				throw new ObjectAlreadyExistsException();
+				throw new ObjectAlreadyExistsException("Account", oldAccount.getNumber().toString());
 			}
 		} else {
 			account.setNumber(generateAccountNumber());
@@ -65,7 +65,7 @@ public class AccountService {
 		if ( (account != null) && (account.getNumber() != 0) ) {
 			return accountRepository.save(AccountDTO.bind(account));
 		} else {
-			throw new NewObjectCantBeNullException();
+			throw new NewObjectCantBeNullException("Account");
 		}
 	}
 	
@@ -94,33 +94,33 @@ public class AccountService {
 	}
 	
 	@Transactional
-	public Account updateAccount(AccountDTO account) {
+	public Account updateAccount(AccountDTO account) throws AccountNotFoundException, MandatoryFieldNotProvidedException {
 		Optional<Account> oldAccount;
 		if ( (account != null) && (account.getId() != 0)) { 
 			oldAccount = accountRepository.findById(account.getId());
 			if (!oldAccount.isPresent()) {
-				throw new AccountNotFoundException();
+				throw new AccountNotFoundException(account.getId());
 			}
 		}
 		if (account.getNumber() != 0) { // check if account number is valid
-			throw new MandatoryFieldNotProvidedException();
+			throw new MandatoryFieldNotProvidedException("Account", "Number");
 		} else {
 			return accountRepository.save(AccountDTO.bind(account));
 		}
 	}
 	
 	@Transactional
-	public void deleteAccount(Long id) {
+	public void deleteAccount(Long id) throws AccountNotFoundException {
 		Optional<Account> account = accountRepository.findById(id);
 		if (account.isPresent()) {
 			accountRepository.delete(account.get());
 		} else {
-			throw new AccountNotFoundException();
+			throw new AccountNotFoundException(id);
 		}
 	}
 	
 	@Transactional
-	public Account addClient(Long id, ClientDTO dto) {
+	public Account addClient(Long id, ClientDTO dto) throws ObjectAlreadyExistsException, ClientNotFoundException, AccountNotFoundException {
 		Optional<Account> account = accountRepository.findById(id);
 		if (account.isPresent()) {
 			// search for this client
@@ -140,18 +140,18 @@ public class AccountService {
 //					accountRepository.save(oldAccount);  // need save the account ?
 					return oldAccount;
 				} else { // this client is already registered to this account
-					throw new ObjectAlreadyExistsException();
+					throw new ObjectAlreadyExistsException("Client/Account", client.get().getId().toString());
 				}
 			} else { // the client was not found
-				throw new ClientNotFoundException();
+				throw new ClientNotFoundException(dto.getId());
 			}
 		} else { // the account was not found
-			throw new AccountNotFoundException();
+			throw new AccountNotFoundException(id);
 		}
 	}
 	
 	@Transactional
-	public Account removeClient(Long id, ClientDTO dto) {
+	public Account removeClient(Long id, ClientDTO dto) throws AccountMustHaveOneClientException, ClientNotFoundException, AccountNotFoundException {
 		Optional<Account> account = accountRepository.findById(id);
 		if (account.isPresent()) {
 			// search for this client
@@ -172,13 +172,13 @@ public class AccountService {
 //					accountRepository.save(oldAccount); // need save the account ?
 					return oldAccount;
 				} else { // this client is already registered to this account
-					throw new ClientNotFoundException();
+					throw new ClientNotFoundException(client.get().getId());
 				}
 			} else { // the client was not found
-				throw new ClientNotFoundException();
+				throw new ClientNotFoundException(dto.getId());
 			}
 		} else { // the account was not found
-			throw new AccountNotFoundException();
+			throw new AccountNotFoundException(id);
 		}
 	}
 }
